@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Vision Buddy Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <style>
+        :root { 
+            --primary: #4a90e2; 
+            --bg: #f4f7f6; 
+            --card: #ffffff; 
+            --text-main: #2c3e50;
+            --text-sub: #7f8c8d;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --accent-orange: #f39c12;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main);
+            margin: 0; 
+            padding: 20px 15px; 
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrapper { 
+            width: 100%; 
+            max-width: 450px; 
+        }
+
+        /* Header & Status */
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { margin: 0 0 10px 0; font-size: 26px; color: var(--primary); }
+        .status-badge { 
+            display: inline-block; 
+            padding: 6px 15px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: bold;
+            background: #e8ecef;
+            color: var(--text-sub);
+            transition: 0.3s;
+        }
+
+        /* Thống kê (Lưới 2x2) */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
+        .card { 
+            background: var(--card); 
+            padding: 20px 15px; 
+            border-radius: 16px; 
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); 
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.96); }
+        .card .icon { font-size: 24px; margin-bottom: 5px; }
+        .card h3 { font-size: 13px; color: var(--text-sub); margin: 0 0 8px 0; text-transform: uppercase; }
+        .card p { font-size: 28px; font-weight: 800; color: var(--primary); margin: 0; }
+
+        /* Khung Điều khiển chung */
+        .control-box { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); 
+            margin-bottom: 20px; 
+        }
+        .control-box h2 { font-size: 16px; margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        
+        /* Form Inputs & Buttons */
+        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        input { 
+            flex: 1; 
+            padding: 12px; 
+            border: 2px solid #eee; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            outline: none; 
+            transition: 0.3s; 
+        }
+        input:focus { border-color: var(--primary); }
+        
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            width: 100%;
+        }
+        button:active { transform: scale(0.97); }
+        button.btn-test { background: var(--accent-orange); margin-bottom: 15px; }
+        button.btn-wifi { background: var(--text-main); }
+        
+        .toast { text-align: center; font-size: 13px; color: var(--accent-green); height: 15px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h1>Vision Buddy 🤖</h1>
+            <div class="status-badge" id="status_badge">⚪ Đang kết nối máy chủ...</div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="icon">⚠️</div>
+                <h3>Sai tư thế</h3>
+                <p id="posture">0</p>
+            </div>
+            <div class="card">
+                <div class="icon">👀</div>
+                <h3>Nháy mắt</h3>
+                <p id="blink">0</p>
+            </div>
+            <div class="card">
+                <div class="icon">😫</div>
+                <h3>Dụi mắt</h3>
+                <p id="rubbing">0</p>
+            </div>
+            <div class="card">
+                <div class="icon">🥱</div>
+                <h3>Ngáp ngủ</h3>
+                <p id="yawn">0</p>
+            </div>
+        </div>
+
+        <div class="control-box">
+            <h2>⏱️ Quản lý Học tập</h2>
+            <button class="btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
+            <div class="input-group">
+                <input type="number" id="minutes" placeholder="Nhập số phút..." value="25">
+                <button style="width: auto;" onclick="setTimer()">BẮT ĐẦU</button>
+            </div>
+            <div class="toast" id="toast_timer"></div>
+        </div>
+
+        <div class="control-box">
+            <h2>📶 Cài đặt WiFi cho Robot</h2>
+            <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
+            <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi" style="margin-top: 5px; margin-bottom: 15px; width: calc(100% - 28px);">
+            <button class="btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+            <div class="toast" id="toast_wifi"></div>
+        </div>
+    </div>
+
+    <script>
+        // 1. CẤU HÌNH MQTT (HIVEMQ CLOUD)
+        const broker = "6c4be298786448adb4ec456c4834e726.s1.eu.hivemq.cloud";
+        const port = 8884; // Port Secure Websocket
+        const clientId = "web_parent_" + Math.random().toString(16).substr(2, 8);
+        const client = new Paho.MQTT.Client(broker, port, clientId);
+        
+        let lastSeenTime = 0;
+        let onlineCheckTimer;
+
+        // THẦY ĐIỀN USERNAME ĐÃ TẠO TRÊN HIVEMQ VÀO ĐÂY
+        const options = {
+            useSSL: true,
+            userName: "ngoctuyka", 
+            password: "Tu12345678@",
+            onSuccess: onConnect,
+            onFailure: function(e) { console.log("Lỗi kết nối MQTT:", e); }
+        };
+
+        // 2. KHỞI CHẠY KHI MỞ TRANG
+        window.onload = function() {
+            // Phục hồi dữ liệu cũ từ bộ nhớ điện thoại
+            if(localStorage.getItem('vision_buddy_data')) {
+                const savedData = JSON.parse(localStorage.getItem('vision_buddy_data'));
+                updateDashboard(savedData);
+            }
+            // Kết nối MQTT
+            client.connect(options);
+            client.onMessageArrived = onMessageArrived;
+        };
+
+        // 3. XỬ LÝ KHI KẾT NỐI MÁY CHỦ THÀNH CÔNG
+        function onConnect() {
+            document.getElementById("status_badge").innerHTML = "🟡 Đang chờ tín hiệu Robot...";
+            client.subscribe("robot_mat/data");
+
+            // Vòng lặp kiểm tra Robot Online (Mỗi 5 giây)
+            onlineCheckTimer = setInterval(() => {
+                if (Date.now() - lastSeenTime > 15000 && lastSeenTime !== 0) {
+                    const badge = document.getElementById("status_badge");
+                    badge.innerHTML = "🔴 Robot Đang Tắt / Mất Mạng";
+                    badge.style.background = "#fadbd8";
+                    badge.style.color = "var(--accent-red)";
+                }
+            }, 5000);
+        }
+
+        // 4. NHẬN VÀ XỬ LÝ DỮ LIỆU TỪ ROBOT
+        function onMessageArrived(message) {
+            if (message.destinationName === "robot_mat/data") {
+                const data = JSON.parse(message.payloadString);
+                updateDashboard(data);
+                
+                // Lưu vào bộ nhớ cục bộ
+                localStorage.setItem('vision_buddy_data', JSON.stringify(data));
+
+                // Cập nhật trạng thái Online
+                lastSeenTime = Date.now();
+                const badge = document.getElementById("status_badge");
+                badge.innerHTML = "🟢 Robot Đang Hoạt Động";
+                badge.style.background = "#d5f5e3";
+                badge.style.color = "var(--accent-green)";
+            }
+        }
+
+        function updateDashboard(data) {
+            if(data.posture !== undefined) document.getElementById("posture").innerText = data.posture;
+            if(data.blink !== undefined) document.getElementById("blink").innerText = data.blink;
+            if(data.rubbing !== undefined) document.getElementById("rubbing").innerText = data.rubbing;
+            if(data.yawn !== undefined) document.getElementById("yawn").innerText = data.yawn;
+        }
+
+        // 5. CÁC HÀM GỬI LỆNH ĐIỀU KHIỂN
+        function sendMqttMessage(topic, payloadStr, toastId, toastMsg) {
+            if(client.isConnected()) {
+                let message = new Paho.MQTT.Message(payloadStr);
+                message.destinationName = topic;
+                client.send(message);
+                
+                const toast = document.getElementById(toastId);
+                toast.innerText = toastMsg;
+                setTimeout(() => { toast.innerText = ""; }, 3000);
+            } else {
+                alert("Chưa kết nối được tới máy chủ! Vui lòng đợi.");
+            }
+        }
+
+        function testSpeaker() {
+            sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!");
+        }
+
+        function setTimer() {
+            let mins = document.getElementById("minutes").value;
+            if (mins > 0) {
+                sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học " + mins + " phút!");
+            }
+        }
+
+        function setWifi() {
+            let ssid = document.getElementById('wifi_ssid').value;
+            let pass = document.getElementById('wifi_pass').value;
+            if(ssid) {
+                let payload = JSON.stringify({ssid: ssid, pass: pass});
+                sendMqttMessage("robot_mat/config_wifi", payload, "toast_wifi", "Đã gửi cấu hình WiFi mới!");
+                document.getElementById('wifi_ssid').value = "";
+                document.getElementById('wifi_pass').value = "";
+            } else {
+                alert("Vui lòng nhập tên WiFi!");
+            }
+        }
+    </script>
+</body>
+</html>
