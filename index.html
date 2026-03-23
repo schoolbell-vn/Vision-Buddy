@@ -16,6 +16,7 @@
             --accent-green: #27ae60;
             --accent-red: #e74c3c;
             --accent-orange: #f39c12;
+            --accent-purple: #9b59b6;
         }
         
         body { 
@@ -30,7 +31,7 @@
 
         .wrapper { 
             width: 100%; 
-            max-width: 450px; 
+            max-width: 480px; 
         }
 
         /* Header & Status */
@@ -47,7 +48,7 @@
             transition: 0.3s;
         }
 
-        /* Thống kê (Lưới 2x2) */
+        /* Thống kê (Lưới 2 cột) */
         .grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -56,7 +57,7 @@
         }
         .card { 
             background: var(--card); 
-            padding: 20px 15px; 
+            padding: 15px 10px; 
             border-radius: 16px; 
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.04); 
@@ -64,8 +65,13 @@
         }
         .card:active { transform: scale(0.96); }
         .card .icon { font-size: 24px; margin-bottom: 5px; }
-        .card h3 { font-size: 13px; color: var(--text-sub); margin: 0 0 8px 0; text-transform: uppercase; }
-        .card p { font-size: 28px; font-weight: 800; color: var(--primary); margin: 0; }
+        .card h3 { font-size: 12px; color: var(--text-sub); margin: 0 0 5px 0; text-transform: uppercase; }
+        .card p { font-size: 26px; font-weight: 800; color: var(--primary); margin: 0; }
+        
+        /* Màu chữ nhấn mạnh cho các thẻ mới */
+        #tilt { color: var(--accent-purple); }
+        #lowlight { color: var(--accent-orange); }
+        #posture { color: var(--accent-red); }
 
         /* Khung Điều khiển chung */
         .control-box { 
@@ -123,19 +129,40 @@
                 <p id="posture">0</p>
             </div>
             <div class="card">
+                <div class="icon">📐</div>
+                <h3>Nghiêng đầu</h3>
+                <p id="tilt">0</p>
+            </div>
+            <div class="card">
                 <div class="icon">👀</div>
                 <h3>Nháy mắt</h3>
                 <p id="blink">0</p>
             </div>
+            <div class="card">
+                <div class="icon">💡</div>
+                <h3>Thiếu sáng</h3>
+                <p id="lowlight">0</p>
+            </div>
+            
             <div class="card">
                 <div class="icon">😫</div>
                 <h3>Dụi mắt</h3>
                 <p id="rubbing">0</p>
             </div>
             <div class="card">
+                <div class="icon">🤷</div>
+                <h3>Mất tập trung</h3>
+                <p id="distract">0</p>
+            </div>
+            <div class="card">
                 <div class="icon">🥱</div>
                 <h3>Ngáp ngủ</h3>
                 <p id="yawn">0</p>
+            </div>
+            <div class="card">
+                <div class="icon">🚶</div>
+                <h3>Vắng mặt</h3>
+                <p id="absence">0</p>
             </div>
         </div>
 
@@ -168,10 +195,10 @@
         let lastSeenTime = 0;
         let onlineCheckTimer;
 
-        // THẦY ĐIỀN USERNAME ĐÃ TẠO TRÊN HIVEMQ VÀO ĐÂY
+        // THẦY ĐIỀN USERNAME ĐÃ TẠO TRÊN HIVEMQ VÀO ĐÂY (Vẫn giữ nguyên Pass cũ của thầy)
         const options = {
             useSSL: true,
-            userName: "ngoctuyka", 
+            userName: "YOUR_MQTT_USERNAME", 
             password: "Tu12345678@",
             onSuccess: onConnect,
             onFailure: function(e) { console.log("Lỗi kết nối MQTT:", e); }
@@ -223,11 +250,18 @@
             }
         }
 
+        // CẬP NHẬT GIAO DIỆN (Đã thêm 4 biến mới)
         function updateDashboard(data) {
             if(data.posture !== undefined) document.getElementById("posture").innerText = data.posture;
             if(data.blink !== undefined) document.getElementById("blink").innerText = data.blink;
             if(data.rubbing !== undefined) document.getElementById("rubbing").innerText = data.rubbing;
             if(data.yawn !== undefined) document.getElementById("yawn").innerText = data.yawn;
+            
+            // 4 Biến mới
+            if(data.tilt !== undefined) document.getElementById("tilt").innerText = data.tilt;
+            if(data.lowlight !== undefined) document.getElementById("lowlight").innerText = data.lowlight;
+            if(data.distract !== undefined) document.getElementById("distract").innerText = data.distract;
+            if(data.absence !== undefined) document.getElementById("absence").innerText = data.absence;
         }
 
         // 5. CÁC HÀM GỬI LỆNH ĐIỀU KHIỂN
