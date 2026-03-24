@@ -169,6 +169,12 @@
         <div class="control-box">
             <h2>⏱️ Quản lý Học tập</h2>
             <button class="btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
+            <div class="input-group" style="flex-direction: column; gap: 5px; margin-bottom: 20px;">
+                <label for="brightness" style="font-size: 14px; font-weight: bold; color: var(--text-sub);">
+                    💡 Độ sáng màn hình: <span id="bright_val" style="color: var(--primary);">100</span>%
+                </label>
+                <input type="range" id="brightness" min="0" max="255" value="255" onchange="setBrightness(this.value)" style="width: 100%;">
+            </div>
             <div class="input-group">
                 <input type="number" id="minutes" placeholder="Nhập số phút..." value="25">
                 <button style="width: auto;" onclick="setTimer()">BẮT ĐẦU</button>
@@ -198,7 +204,7 @@
         // THẦY ĐIỀN USERNAME ĐÃ TẠO TRÊN HIVEMQ VÀO ĐÂY (Vẫn giữ nguyên Pass cũ của thầy)
         const options = {
             useSSL: true,
-            userName: "ngoctuyka", 
+            userName: "YOUR_MQTT_USERNAME", 
             password: "Tu12345678@",
             onSuccess: onConnect,
             onFailure: function(e) { console.log("Lỗi kết nối MQTT:", e); }
@@ -301,6 +307,12 @@
             } else {
                 alert("Vui lòng nhập tên WiFi!");
             }
+        }
+        function setBrightness(val) {
+            // Cập nhật số % hiển thị trên web
+            document.getElementById("bright_val").innerText = Math.round((val / 255) * 100);
+            // Gửi giá trị (0-255) tới ESP32
+            sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!");
         }
     </script>
 </body>
