@@ -167,6 +167,26 @@
         </div>
 
         <div class="control-box">
+            <h2>🧠 Cài đặt Trí tuệ nhân tạo (AI)</h2>
+            <div class="input-group" style="flex-direction: column; gap: 5px; margin-bottom: 15px;">
+                <label for="ai_light" style="font-size: 14px; font-weight: bold; color: var(--text-sub);">
+                    💡 Ngưỡng cảnh báo tối (Hiện tại: <span id="val_light" style="color: var(--accent-orange);">80</span>)
+                </label>
+                <input type="range" id="ai_light" min="20" max="150" value="80" oninput="document.getElementById('val_light').innerText=this.value" style="width: 100%;">
+                <small style="color: gray; font-size: 11px;">Số càng to -> Càng dễ báo thiếu sáng</small>
+            </div>
+
+            <div class="input-group" style="flex-direction: column; gap: 5px; margin-bottom: 20px;">
+                <label for="ai_dist" style="font-size: 14px; font-weight: bold; color: var(--text-sub);">
+                    📏 Khoảng cách chống cận (<span id="val_dist" style="color: var(--accent-red);">120</span> px)
+                </label>
+                <input type="range" id="ai_dist" min="80" max="200" value="120" oninput="document.getElementById('val_dist').innerText=this.value" style="width: 100%;">
+                <small style="color: gray; font-size: 11px;">Kích thước khuôn mặt tối đa cho phép</small>
+            </div>
+
+            <button class="btn-wifi" style="background: var(--accent-purple);" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
+            <div class="toast" id="toast_ai"></div>
+        </div>
             <h2>⏱️ Quản lý Học tập</h2>
             <button class="btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
             <div class="input-group" style="flex-direction: column; gap: 5px; margin-bottom: 20px;">
@@ -204,7 +224,7 @@
         // THẦY ĐIỀN USERNAME ĐÃ TẠO TRÊN HIVEMQ VÀO ĐÂY (Vẫn giữ nguyên Pass cũ của thầy)
         const options = {
             useSSL: true,
-            userName: "ngoctuyka", 
+            userName: "YOUR_MQTT_USERNAME", 
             password: "Tu12345678@",
             onSuccess: onConnect,
             onFailure: function(e) { console.log("Lỗi kết nối MQTT:", e); }
@@ -313,6 +333,16 @@
             document.getElementById("bright_val").innerText = Math.round((val / 255) * 100);
             // Gửi giá trị (0-255) tới ESP32
             sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!");
+        }
+        function setAiConfig() {
+            let light = document.getElementById("ai_light").value;
+            let dist = document.getElementById("ai_dist").value;
+            
+            // Đóng gói thành chuỗi JSON
+            let payload = JSON.stringify({ light: parseInt(light), distance: parseInt(dist) });
+            
+            // Gửi lên MQTT
+            sendMqttMessage("robot_mat/config_ai", payload, "toast_ai", "Đã cập nhật não bộ AI!");
         }
     </script>
 </body>
