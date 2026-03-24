@@ -14,50 +14,33 @@
             --accent-orange: #f39c12; --accent-purple: #9b59b6;
         }
         
-        /* Đặt lại lề mặc định để không bị tràn viền trên điện thoại */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: var(--bg); 
             color: var(--text-main);
-            padding: 15px; /* Căn lề an toàn cho mọi loại màn hình */
+            padding: 15px; 
+            padding-bottom: 80px; /* Chừa khoảng trống cho thanh menu dưới đáy */
         }
 
-        .wrapper { 
-            width: 100%; 
-            max-width: 500px; /* Điện thoại sẽ tự ôm 100%, máy tính giới hạn 500px */
-            margin: 0 auto;
-        }
+        .wrapper { width: 100%; max-width: 500px; margin: 0 auto; }
 
-        /* Phần Tiêu đề & Trạng thái */
         .header { text-align: center; margin-bottom: 20px; margin-top: 10px; }
         .header h1 { font-size: 26px; color: var(--primary); margin-bottom: 10px; }
         .status-badge { 
-            display: inline-block; 
-            padding: 10px 15px; 
-            border-radius: 20px; 
-            font-size: 13px; 
-            font-weight: bold;
-            background: #e8ecef;
-            color: var(--text-sub);
-            width: 100%; /* Trải dài trên màn hình nhỏ */
+            display: inline-block; padding: 10px 15px; border-radius: 20px; 
+            font-size: 13px; font-weight: bold; background: #e8ecef; color: var(--text-sub); width: 100%; 
         }
 
-        /* Lưới Thống kê (2 cột đều nhau cho giao diện dọc) */
-        .grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            margin-bottom: 20px; 
-        }
-        .card { 
-            background: var(--card); 
-            padding: 15px 10px; 
-            border-radius: 16px; 
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-        }
+        /* Logic chuyển Tab */
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Lưới Thống kê (Trang chủ) */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .card { background: var(--card); padding: 15px 10px; border-radius: 16px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card .icon { font-size: 26px; margin-bottom: 5px; }
         .card h3 { font-size: 11px; color: var(--text-sub); margin-bottom: 5px; text-transform: uppercase; }
         .card p { font-size: 24px; font-weight: 800; color: var(--primary); }
@@ -66,56 +49,42 @@
         #lowlight { color: var(--accent-orange); }
         #posture { color: var(--accent-red); }
 
-        /* Các Khối Điều khiển (Controls) */
-        .control-box { 
-            background: var(--card); 
-            padding: 20px 15px; 
-            border-radius: 16px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-            margin-bottom: 20px; 
-        }
+        /* Các Khối Điều khiển (Cài đặt) */
+        .control-box { background: var(--card); padding: 20px 15px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .control-box h2 { font-size: 16px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         
-        /* Bố cục dọc cho Mobile: Ô nhập liệu và Nút bấm nằm dưới nhau */
-        .input-group { 
-            display: flex; 
-            flex-direction: column; /* Quan trọng nhất: Xếp dọc */
-            gap: 10px; 
-            margin-bottom: 15px; 
-        }
+        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .input-group label { font-size: 14px; font-weight: bold; color: var(--text-sub); }
         .input-group small { color: gray; font-size: 12px; margin-top: -5px; }
 
         input[type="text"], input[type="password"], input[type="number"] { 
-            width: 100%; 
-            padding: 14px; /* Cao hơn để dễ chạm */
-            border: 2px solid #eee; 
-            border-radius: 10px; 
-            font-size: 16px; /* 16px chống tự động phóng to trên iOS */
-            outline: none; 
-            background: #fafafa;
+            width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa;
         }
         input:focus { border-color: var(--primary); background: #fff; }
         input[type="range"] { padding: 0; border: none; height: 35px; width: 100%; }
         
-        /* Nút bấm to bản */
-        button { 
-            width: 100%; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 14px; 
-            border-radius: 10px; 
-            font-size: 15px; 
-            font-weight: bold; 
-            cursor: pointer; 
-        }
-        button:active { background: #357abd; transform: scale(0.98); }
-        button.btn-test { background: var(--accent-orange); margin-bottom: 15px; }
-        button.btn-ai { background: var(--accent-purple); }
-        button.btn-wifi { background: var(--text-main); }
+        .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn-action:active { transform: scale(0.98); }
+        .btn-test { background: var(--accent-orange); margin-bottom: 15px; }
+        .btn-ai { background: var(--accent-purple); }
+        .btn-wifi { background: var(--text-main); }
         
         .toast { text-align: center; font-size: 13px; color: var(--accent-green); height: 15px; margin-top: 5px; font-weight: bold;}
+
+        /* Thanh Điều Hướng Dưới Đáy (Bottom Navigation) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--card); display: flex; justify-content: space-around;
+            padding: 10px 0 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .nav-item {
+            background: none; border: none; color: var(--text-sub); font-size: 12px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1;
+        }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-icon { font-size: 22px; filter: grayscale(100%); opacity: 0.6; }
+        .nav-item.active .nav-icon { filter: grayscale(0%); opacity: 1; }
+
     </style>
 </head>
 <body>
@@ -125,80 +94,92 @@
             <div class="status-badge" id="status_badge">⚪ Đang kết nối máy chủ...</div>
         </div>
         
-        <div class="grid">
-            <div class="card">
-                <div class="icon">⚠️</div><h3>Sai tư thế</h3><p id="posture">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">📐</div><h3>Nghiêng đầu</h3><p id="tilt">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">👀</div><h3>Nháy mắt</h3><p id="blink">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">💡</div><h3>Thiếu sáng</h3><p id="lowlight">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">😫</div><h3>Dụi mắt</h3><p id="rubbing">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">🤷</div><h3>Mất tập trung</h3><p id="distract">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">🥱</div><h3>Ngáp ngủ</h3><p id="yawn">0</p>
-            </div>
-            <div class="card">
-                <div class="icon">🚶</div><h3>Vắng mặt</h3><p id="absence">0</p>
+        <div id="tab-home" class="tab-content active">
+            <div class="grid">
+                <div class="card"><div class="icon">⚠️</div><h3>Sai tư thế</h3><p id="posture">0</p></div>
+                <div class="card"><div class="icon">📐</div><h3>Nghiêng đầu</h3><p id="tilt">0</p></div>
+                <div class="card"><div class="icon">👀</div><h3>Nháy mắt</h3><p id="blink">0</p></div>
+                <div class="card"><div class="icon">💡</div><h3>Thiếu sáng</h3><p id="lowlight">0</p></div>
+                <div class="card"><div class="icon">😫</div><h3>Dụi mắt</h3><p id="rubbing">0</p></div>
+                <div class="card"><div class="icon">🤷</div><h3>Mất tập trung</h3><p id="distract">0</p></div>
+                <div class="card"><div class="icon">🥱</div><h3>Ngáp ngủ</h3><p id="yawn">0</p></div>
+                <div class="card"><div class="icon">🚶</div><h3>Vắng mặt</h3><p id="absence">0</p></div>
             </div>
         </div>
 
-        <div class="control-box">
-            <h2>⏱️ Quản lý Học tập</h2>
-            <button class="btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
-            
-            <div class="input-group">
-                <label for="brightness">💡 Độ sáng màn hình: <span id="bright_val" style="color: var(--primary);">100</span>%</label>
-                <input type="range" id="brightness" min="0" max="255" value="255" onchange="setBrightness(this.value)">
-            </div>
-            
-            <div class="input-group">
-                <label for="minutes">⏳ Đặt thời gian học (Phút):</label>
-                <input type="number" id="minutes" placeholder="Nhập số phút..." value="25">
-                <button onclick="setTimer()">BẮT ĐẦU ĐẾM GIỜ</button>
-            </div>
-            <div class="toast" id="toast_timer"></div>
-        </div>
-
-        <div class="control-box">
-            <h2>🧠 Cài đặt Trí tuệ nhân tạo (AI)</h2>
-            <div class="input-group">
-                <label for="ai_light">💡 Ngưỡng báo tối (Đang đặt: <span id="val_light" style="color: var(--accent-orange);">80</span>)</label>
-                <input type="range" id="ai_light" min="20" max="150" value="80" oninput="document.getElementById('val_light').innerText=this.value">
-                <small>Số to hơn = Dễ báo thiếu sáng hơn</small>
+        <div id="tab-settings" class="tab-content">
+            <div class="control-box">
+                <h2>⏱️ Quản lý Học tập</h2>
+                <button class="btn-action btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
+                
+                <div class="input-group">
+                    <label for="brightness">💡 Độ sáng màn hình: <span id="bright_val" style="color: var(--primary);">100</span>%</label>
+                    <input type="range" id="brightness" min="0" max="255" value="255" onchange="setBrightness(this.value)">
+                </div>
+                
+                <div class="input-group">
+                    <label for="minutes">⏳ Đặt thời gian học (Phút):</label>
+                    <input type="number" id="minutes" placeholder="Nhập số phút..." value="25">
+                    <button class="btn-action" onclick="setTimer()">BẮT ĐẦU ĐẾM GIỜ</button>
+                </div>
+                <div class="toast" id="toast_timer"></div>
             </div>
 
-            <div class="input-group">
-                <label for="ai_dist">📏 Chống cận (<span id="val_dist" style="color: var(--accent-red);">120</span> px)</label>
-                <input type="range" id="ai_dist" min="80" max="200" value="120" oninput="document.getElementById('val_dist').innerText=this.value">
-                <small>Kích thước khuôn mặt tối đa cho phép</small>
+            <div class="control-box">
+                <h2>🧠 Cài đặt Trí tuệ nhân tạo (AI)</h2>
+                <div class="input-group">
+                    <label for="ai_light">💡 Ngưỡng báo tối (Đang đặt: <span id="val_light" style="color: var(--accent-orange);">80</span>)</label>
+                    <input type="range" id="ai_light" min="20" max="150" value="80" oninput="document.getElementById('val_light').innerText=this.value">
+                    <small>Số to hơn = Dễ báo thiếu sáng hơn</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="ai_dist">📏 Chống cận (<span id="val_dist" style="color: var(--accent-red);">120</span> px)</label>
+                    <input type="range" id="ai_dist" min="80" max="200" value="120" oninput="document.getElementById('val_dist').innerText=this.value">
+                    <small>Kích thước khuôn mặt tối đa cho phép</small>
+                </div>
+
+                <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
+                <div class="toast" id="toast_ai"></div>
             </div>
 
-            <button class="btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
-            <div class="toast" id="toast_ai"></div>
-        </div>
-
-        <div class="control-box" style="margin-bottom: 40px;">
-            <h2>📶 Cài đặt WiFi cho Robot</h2>
-            <div class="input-group">
-                <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
-                <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
-                <button class="btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+            <div class="control-box">
+                <h2>📶 Cài đặt WiFi cho Robot</h2>
+                <div class="input-group">
+                    <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
+                    <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
+                    <button class="btn-action btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+                </div>
+                <div class="toast" id="toast_wifi"></div>
             </div>
-            <div class="toast" id="toast_wifi"></div>
         </div>
     </div>
 
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('home', this)">
+            <span class="nav-icon">🏠</span>
+            Trang chủ
+        </button>
+        <button class="nav-item" onclick="switchTab('settings', this)">
+            <span class="nav-icon">⚙️</span>
+            Cài đặt
+        </button>
+    </nav>
+
     <script>
+        // --- LOGIC CHUYỂN TAB ---
+        function switchTab(tabId, element) {
+            // Ẩn tất cả nội dung
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            // Bỏ highlight tất cả các nút
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            
+            // Hiển thị nội dung được chọn và highlight nút tương ứng
+            document.getElementById('tab-' + tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // --- LOGIC MQTT (Giữ nguyên) ---
         const broker = "6c4be298786448adb4ec456c4834e726.s1.eu.hivemq.cloud";
         const port = 8884;
         const clientId = "web_parent_" + Math.random().toString(16).substr(2, 8);
@@ -258,7 +239,8 @@
             if(data.lowlight !== undefined) document.getElementById("lowlight").innerText = data.lowlight;
             if(data.distract !== undefined) document.getElementById("distract").innerText = data.distract;
             if(data.absence !== undefined) document.getElementById("absence").innerText = data.absence;
-            // --- THÊM ĐOẠN NÀY ĐỂ ĐỒNG BỘ THANH TRƯỢT VỚI ROBOT ---
+            
+            // Đồng bộ dữ liệu thanh trượt
             if(data.bright !== undefined) {
                 document.getElementById("brightness").value = data.bright;
                 document.getElementById("bright_val").innerText = Math.round((data.bright / 255) * 100);
@@ -271,7 +253,6 @@
                 document.getElementById("ai_dist").value = data.ai_dist;
                 document.getElementById("val_dist").innerText = data.ai_dist;
             }
-        
         }
 
         function sendMqttMessage(topic, payloadStr, toastId, toastMsg) {
@@ -294,7 +275,7 @@
 
         function setTimer() {
             let mins = document.getElementById("minutes").value;
-            if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã bắt đầu tính giờ!");
+            if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học " + mins + " phút!");
         }
 
         function setAiConfig() {
