@@ -119,6 +119,7 @@
 
             <div class="control-box">
                 <h2>🧠 Tinh chỉnh AI & Cảm biến</h2>
+                
                 <div class="input-group">
                     <label for="ai_pos_y">📉 Ngưỡng cúi thấp (Thẳng lưng): <span id="val_pos_y" style="color: var(--accent-red);">100</span> px</label>
                     <input type="range" id="ai_pos_y" min="60" max="140" step="5" value="100" oninput="document.getElementById('val_pos_y').innerText=this.value">
@@ -148,6 +149,7 @@
                     <input type="range" id="ai_light" min="20" max="300" value="80" oninput="document.getElementById('val_light').innerText=this.value">
                     <div class="guide"><b>Mẹo:</b> Chuẩn đọc sách là 150-300 Lux. Nếu phòng bình thường mà robot hay kêu "Thiếu sáng", hãy <b>KÉO GIẢM</b> số này xuống. Nếu phòng tối mà robot vẫn im lặng, hãy <b>KÉO TĂNG</b> số này lên.</div>
                 </div>
+
                 <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
                 <div class="toast" id="toast_ai"></div>
             </div>
@@ -168,7 +170,12 @@
                     </select>
                     <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID) mới">
                     <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
-                    <button class="btn-action btn-wifi" onclick="setWifi()">LƯU WIFI VÀO ROBOT</button>
+                    
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-sub); font-weight: normal; margin-top: -5px; cursor: pointer;">
+                        <input type="checkbox" onclick="togglePassword()" style="width: 16px; height: 16px; cursor: pointer;"> Hiển thị mật khẩu
+                    </label>
+
+                    <button class="btn-action btn-wifi" onclick="setWifi()" style="margin-top: 5px;">LƯU WIFI VÀO ROBOT</button>
                 </div>
                 <div class="guide"><b>Mẹo:</b> Robot sẽ tự động dò kết nối theo thứ tự từ 1 đến 3 mỗi khi bật nguồn.</div>
                 <div class="toast" id="toast_wifi"></div>
@@ -191,6 +198,16 @@
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active');
+        }
+
+        // Hàm bật/tắt hiển thị mật khẩu
+        function togglePassword() {
+            let passInput = document.getElementById("wifi_pass");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+            } else {
+                passInput.type = "password";
+            }
         }
 
         const broker = "6c4be298786448adb4ec456c4834e726.s1.eu.hivemq.cloud";
