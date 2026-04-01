@@ -93,6 +93,13 @@
             <div class="control-box">
                 <h2>⏱️ Quản lý Học tập</h2>
                 <button class="btn-action btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
+                
+                <div class="input-group">
+                    <label for="volume">🔊 Âm lượng loa: <span id="vol_val" style="color: var(--primary);">15</span>/21</label>
+                    <input type="range" id="volume" min="0" max="21" value="15" onchange="setVolume(this.value)">
+                    <div class="guide"><b>Mẹo:</b> Mức 15 là vừa đủ nghe. Đừng để mức 21 quá lâu nếu loa nhỏ vì có thể gây rè.</div>
+                </div>
+
                 <div class="input-group">
                     <label for="brightness">💡 Độ sáng màn hình: <span id="bright_val" style="color: var(--primary);">100</span>%</label>
                     <input type="range" id="brightness" min="0" max="255" value="255" onchange="setBrightness(this.value)">
@@ -200,7 +207,6 @@
             element.classList.add('active');
         }
 
-        // Hàm bật/tắt hiển thị mật khẩu
         function togglePassword() {
             let passInput = document.getElementById("wifi_pass");
             if (passInput.type === "password") {
@@ -260,6 +266,7 @@
             }
 
             safeUpdate("brightness", data.bright, "bright_val", true);
+            safeUpdate("volume", data.vol, "vol_val", false); // Cập nhật thanh trượt volume
             safeUpdate("ai_light", data.ai_light, "val_light", false);
             safeUpdate("tof_dist", data.tof_dist, "val_dist", false);
             safeUpdate("ai_yaw", data.ai_yaw, "val_yaw", false);
@@ -271,7 +278,6 @@
             if(data.aud_lig !== undefined) document.getElementById("aud_light").checked = data.aud_lig;
             if(data.aud_abs !== undefined) document.getElementById("aud_absence").checked = data.aud_abs;
 
-            // Cập nhật tên WiFi hiển thị trên Web
             if(data.wifi0 !== undefined) document.getElementById("w0").innerText = data.wifi0 || "Trống";
             if(data.wifi1 !== undefined) document.getElementById("w1").innerText = data.wifi1 || "Trống";
             if(data.wifi2 !== undefined) document.getElementById("w2").innerText = data.wifi2 || "Trống";
@@ -287,6 +293,13 @@
         }
 
         function testSpeaker() { sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!"); }
+        
+        // HÀM GỬI LỆNH CHỈNH ÂM LƯỢNG MỚI
+        function setVolume(val) { 
+            document.getElementById("vol_val").innerText = val; 
+            sendMqttMessage("robot_mat/volume", val.toString(), "toast_timer", "Đã chỉnh âm lượng!"); 
+        }
+
         function setBrightness(val) { document.getElementById("bright_val").innerText = Math.round((val/255)*100); sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!"); }
         function setTimer() { let mins = document.getElementById("minutes").value; if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học!"); }
         
