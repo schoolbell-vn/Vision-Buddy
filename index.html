@@ -46,8 +46,8 @@
         .input-group label { font-size: 14px; font-weight: bold; color: var(--text-sub); }
         .input-group .guide { color: #7f8c8d; font-size: 12px; line-height: 1.4; padding: 8px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid var(--primary); }
 
-        input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa; }
-        input:focus { border-color: var(--primary); background: #fff; }
+        input[type="text"], input[type="password"], input[type="number"], select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa; }
+        input:focus, select:focus { border-color: var(--primary); background: #fff; }
         input[type="range"] { padding: 0; border: none; height: 35px; width: 100%; }
         
         .check-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
@@ -119,7 +119,6 @@
 
             <div class="control-box">
                 <h2>🧠 Tinh chỉnh AI & Cảm biến</h2>
-                
                 <div class="input-group">
                     <label for="ai_pos_y">📉 Ngưỡng cúi thấp (Thẳng lưng): <span id="val_pos_y" style="color: var(--accent-red);">100</span> px</label>
                     <input type="range" id="ai_pos_y" min="60" max="140" step="5" value="100" oninput="document.getElementById('val_pos_y').innerText=this.value">
@@ -149,18 +148,29 @@
                     <input type="range" id="ai_light" min="20" max="300" value="80" oninput="document.getElementById('val_light').innerText=this.value">
                     <div class="guide"><b>Mẹo:</b> Chuẩn đọc sách là 150-300 Lux. Nếu phòng bình thường mà robot hay kêu "Thiếu sáng", hãy <b>KÉO GIẢM</b> số này xuống. Nếu phòng tối mà robot vẫn im lặng, hãy <b>KÉO TĂNG</b> số này lên.</div>
                 </div>
-
                 <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
                 <div class="toast" id="toast_ai"></div>
             </div>
 
             <div class="control-box">
-                <h2>📶 Cài đặt WiFi cho Robot</h2>
-                <div class="input-group">
-                    <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
-                    <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
-                    <button class="btn-action btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+                <h2>📶 Quản lý Mạng WiFi (Tối đa 3 mạng)</h2>
+                <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 12px; background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #eee;">
+                    <b>Các mạng đang lưu trong Robot:</b><br>
+                    1. <span id="w0" style="color: var(--primary); font-weight:bold;">Trống</span><br>
+                    2. <span id="w1" style="color: var(--primary); font-weight:bold;">Trống</span><br>
+                    3. <span id="w2" style="color: var(--primary); font-weight:bold;">Trống</span>
                 </div>
+                <div class="input-group">
+                    <select id="wifi_slot">
+                        <option value="0">Lưu vào Khe số 1 (Mạng Chính/Ở nhà)</option>
+                        <option value="1">Lưu vào Khe số 2 (Mạng Dự phòng/Ở trường)</option>
+                        <option value="2">Lưu vào Khe số 3 (Mạng Dự phòng 3)</option>
+                    </select>
+                    <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID) mới">
+                    <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
+                    <button class="btn-action btn-wifi" onclick="setWifi()">LƯU WIFI VÀO ROBOT</button>
+                </div>
+                <div class="guide"><b>Mẹo:</b> Robot sẽ tự động dò kết nối theo thứ tự từ 1 đến 3 mỗi khi bật nguồn.</div>
                 <div class="toast" id="toast_wifi"></div>
             </div>
         </div>
@@ -243,6 +253,11 @@
             if(data.aud_foc !== undefined) document.getElementById("aud_focus").checked = data.aud_foc;
             if(data.aud_lig !== undefined) document.getElementById("aud_light").checked = data.aud_lig;
             if(data.aud_abs !== undefined) document.getElementById("aud_absence").checked = data.aud_abs;
+
+            // Cập nhật tên WiFi hiển thị trên Web
+            if(data.wifi0 !== undefined) document.getElementById("w0").innerText = data.wifi0 || "Trống";
+            if(data.wifi1 !== undefined) document.getElementById("w1").innerText = data.wifi1 || "Trống";
+            if(data.wifi2 !== undefined) document.getElementById("w2").innerText = data.wifi2 || "Trống";
         }
 
         function sendMqttMessage(topic, payloadStr, toastId, toastMsg) {
@@ -280,11 +295,12 @@
         }
 
         function setWifi() {
+            let slot = document.getElementById('wifi_slot').value;
             let ssid = document.getElementById('wifi_ssid').value;
             let pass = document.getElementById('wifi_pass').value;
             if(ssid) {
-                let payload = JSON.stringify({ssid: ssid, pass: pass});
-                sendMqttMessage("robot_mat/config_wifi", payload, "toast_wifi", "Đã gửi WiFi!");
+                let payload = JSON.stringify({slot: parseInt(slot), ssid: ssid, pass: pass});
+                sendMqttMessage("robot_mat/config_wifi", payload, "toast_wifi", "Đã lưu mạng: " + ssid);
                 document.getElementById('wifi_ssid').value = ""; document.getElementById('wifi_pass').value = "";
             } else alert("Vui lòng nhập tên WiFi!");
         }
