@@ -129,21 +129,25 @@
                 <div class="input-group">
                     <label for="tof_dist">📏 Cảnh báo ngồi gần: <span id="val_dist" style="color: var(--accent-red);">350</span> mm</label>
                     <input type="range" id="tof_dist" min="200" max="600" step="10" value="350" oninput="document.getElementById('val_dist').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Khoảng cách an toàn là 300-350mm. Nếu bé chúi mặt sát bàn mà robot không nhắc, hãy <b>KÉO TĂNG</b> số này lên để cảm biến bắt nhạy hơn từ xa.</div>
                 </div>
 
                 <div class="input-group">
                     <label for="ai_yaw">↔️ Độ nhạy quay mặt: <span id="val_yaw" style="color: var(--primary);">0.60</span></label>
                     <input type="range" id="ai_yaw" min="0.45" max="0.75" step="0.01" value="0.60" oninput="document.getElementById('val_yaw').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Nếu bé mới hơi liếc ngang mà robot đã kêu mất tập trung, hãy <b>KÉO GIẢM</b> xuống (VD: 0.55). Nếu bé quay hẳn mặt đi mà robot không biết, hãy <b>KÉO TĂNG</b> lên (VD: 0.65).</div>
                 </div>
 
                 <div class="input-group">
                     <label for="ai_roll">📐 Độ nhạy nghiêng đầu: <span id="val_roll" style="color: var(--accent-purple);">0.95</span></label>
                     <input type="range" id="ai_roll" min="0.85" max="1.10" step="0.01" value="0.95" oninput="document.getElementById('val_roll').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Ngược lại với quay mặt. Nếu bé hơi nghiêng mà robot đã nhắc, hãy <b>KÉO TĂNG</b> lên (VD: 1.00). Nếu bé ép sát tai vào vai mà robot vẫn chưa kêu, hãy <b>KÉO GIẢM</b> xuống (VD: 0.90).</div>
                 </div>
 
                 <div class="input-group">
                     <label for="ai_light">💡 Ngưỡng báo tối: <span id="val_light" style="color: var(--accent-orange);">80</span> Lux</label>
                     <input type="range" id="ai_light" min="20" max="300" value="80" oninput="document.getElementById('val_light').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Chuẩn đọc sách là 150-300 Lux. Nếu phòng bình thường mà robot hay kêu "Thiếu sáng", hãy <b>KÉO GIẢM</b> số này xuống. Nếu phòng tối mà robot vẫn im lặng, hãy <b>KÉO TĂNG</b> số này lên.</div>
                 </div>
 
                 <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
@@ -233,7 +237,6 @@
             safeUpdate("tof_dist", data.tof_dist, "val_dist", false);
             safeUpdate("ai_yaw", data.ai_yaw, "val_yaw", false);
             safeUpdate("ai_roll", data.ai_roll, "val_roll", false);
-            // Thêm cập nhật thanh trượt cúi thấp từ Robot về Web
             safeUpdate("ai_pos_y", data.ai_pos_y, "val_pos_y", false); 
             
             if(data.aud_pos !== undefined) document.getElementById("aud_posture").checked = data.aud_pos;
@@ -261,7 +264,7 @@
                 tof_dist: parseInt(document.getElementById("tof_dist").value),
                 ai_yaw: parseFloat(document.getElementById("ai_yaw").value),
                 ai_roll: parseFloat(document.getElementById("ai_roll").value),
-                ai_pos_y: parseInt(document.getElementById("ai_pos_y").value) // Thêm tham số cúi thấp
+                ai_pos_y: parseInt(document.getElementById("ai_pos_y").value)
             });
             sendMqttMessage("robot_mat/config_ai", payload, "toast_ai", "Đã cập nhật AI!");
         }
