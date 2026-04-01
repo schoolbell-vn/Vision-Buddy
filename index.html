@@ -42,24 +42,23 @@
         .control-box { background: var(--card); padding: 20px 15px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .control-box h2 { font-size: 16px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         
-        .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
         .input-group label { font-size: 14px; font-weight: bold; color: var(--text-sub); }
-        .input-group small { color: gray; font-size: 12px; margin-top: -5px; }
+        .input-group .guide { color: #7f8c8d; font-size: 12px; line-height: 1.4; padding: 8px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid var(--primary); }
 
         input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa; }
         input:focus { border-color: var(--primary); background: #fff; }
         input[type="range"] { padding: 0; border: none; height: 35px; width: 100%; }
         
         /* Checkbox Style */
-        .check-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
-        .check-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-main); background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee;}
-        .check-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); }
+        .check-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
+        .check-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-main); background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee; cursor: pointer;}
+        .check-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer; }
 
         .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
         .btn-action:active { transform: scale(0.98); }
         .btn-test { background: var(--accent-orange); margin-bottom: 15px; }
         .btn-ai { background: var(--accent-purple); }
-        .btn-audio { background: var(--accent-green); }
         .btn-wifi { background: var(--text-main); }
         
         .toast { text-align: center; font-size: 13px; color: var(--accent-green); height: 15px; margin-top: 5px; font-weight: bold;}
@@ -108,37 +107,56 @@
             </div>
 
             <div class="control-box">
-                <h2>🔊 Bật/Tắt Âm Thanh Cảnh Báo</h2>
+                <h2>🔊 Bật/Tắt Loa Cảnh Báo</h2>
                 <div class="check-group">
-                    <label class="check-item"><input type="checkbox" id="aud_posture" checked> ⚠️ Sai tư thế (Cúi thấp, Ngồi gần)</label>
-                    <label class="check-item"><input type="checkbox" id="aud_focus" checked> 👀 Mất tập trung (Nghiêng, Quay mặt)</label>
-                    <label class="check-item"><input type="checkbox" id="aud_light" checked> 💡 Cảnh báo thiếu sáng</label>
-                    <label class="check-item"><input type="checkbox" id="aud_absence" checked> 🚶 Cảnh báo vắng mặt</label>
+                    <label class="check-item"><input type="checkbox" id="aud_posture" onchange="setAudioConfig()" checked> ⚠️ Sai tư thế (Cúi thấp, Ngồi gần)</label>
+                    <label class="check-item"><input type="checkbox" id="aud_focus" onchange="setAudioConfig()" checked> 👀 Mất tập trung (Nghiêng, Quay mặt)</label>
+                    <label class="check-item"><input type="checkbox" id="aud_light" onchange="setAudioConfig()" checked> 💡 Cảnh báo thiếu sáng</label>
+                    <label class="check-item"><input type="checkbox" id="aud_absence" onchange="setAudioConfig()" checked> 🚶 Cảnh báo vắng mặt</label>
                 </div>
-                <button class="btn-action btn-audio" onclick="setAudioConfig()">💾 LƯU CHẾ ĐỘ ÂM THANH</button>
+                <small style="display:block; text-align:center; color: var(--accent-green); font-weight: bold; font-size: 12px;">✓ Hệ thống tự động lưu khi bạn tích chọn</small>
                 <div class="toast" id="toast_audio"></div>
             </div>
 
             <div class="control-box">
-                <h2>🧠 Cài đặt AI & Cảm biến ToF</h2>
+                <h2>🧠 Tinh chỉnh Độ nhạy AI & Cảm biến</h2>
+                
                 <div class="input-group">
-                    <label for="ai_light">💡 Ngưỡng báo tối (Đang đặt: <span id="val_light" style="color: var(--accent-orange);">80</span>)</label>
+                    <label for="ai_light">💡 Ngưỡng báo tối: <span id="val_light" style="color: var(--accent-orange);">80</span> Lux</label>
                     <input type="range" id="ai_light" min="20" max="300" value="80" oninput="document.getElementById('val_light').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Chuẩn đọc sách là 150-300 Lux. Nếu phòng bình thường mà robot hay kêu "Thiếu sáng", hãy <b>KÉO GIẢM</b> số này xuống. Nếu phòng tối mà robot vẫn im lặng, hãy <b>KÉO TĂNG</b> số này lên.</div>
                 </div>
+
                 <div class="input-group">
-                    <label for="tof_dist">📏 Cảnh báo gần ToF: <span id="val_dist" style="color: var(--accent-red);">350</span> mm</label>
+                    <label for="tof_dist">📏 Cảnh báo ngồi gần: <span id="val_dist" style="color: var(--accent-red);">350</span> mm</label>
                     <input type="range" id="tof_dist" min="200" max="600" step="10" value="350" oninput="document.getElementById('val_dist').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Khoảng cách an toàn là 300-350mm. Nếu bé chúi mặt sát bàn mà robot không nhắc, hãy <b>KÉO TĂNG</b> số này lên để cảm biến bắt nhạy hơn từ xa.</div>
                 </div>
+
                 <div class="input-group">
-                    <label for="ai_yaw">↔️ Nhạy quay mặt: <span id="val_yaw" style="color: var(--primary);">0.60</span></label>
+                    <label for="ai_yaw">↔️ Độ nhạy quay mặt: <span id="val_yaw" style="color: var(--primary);">0.60</span></label>
                     <input type="range" id="ai_yaw" min="0.45" max="0.75" step="0.01" value="0.60" oninput="document.getElementById('val_yaw').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Nếu bé mới hơi liếc ngang mà robot đã kêu mất tập trung, hãy <b>KÉO GIẢM</b> xuống (VD: 0.55). Nếu bé quay hẳn mặt đi mà robot không biết, hãy <b>KÉO TĂNG</b> lên (VD: 0.65).</div>
                 </div>
+
                 <div class="input-group">
-                    <label for="ai_roll">📐 Nhạy nghiêng đầu: <span id="val_roll" style="color: var(--accent-purple);">0.95</span></label>
+                    <label for="ai_roll">📐 Độ nhạy nghiêng đầu: <span id="val_roll" style="color: var(--accent-purple);">0.95</span></label>
                     <input type="range" id="ai_roll" min="0.85" max="1.10" step="0.01" value="0.95" oninput="document.getElementById('val_roll').innerText=this.value">
+                    <div class="guide"><b>Mẹo:</b> Ngược lại với quay mặt. Nếu bé hơi nghiêng mà robot đã nhắc, hãy <b>KÉO TĂNG</b> lên (VD: 1.00). Nếu bé ép sát tai vào vai mà robot vẫn chưa kêu, hãy <b>KÉO GIẢM</b> xuống (VD: 0.90).</div>
                 </div>
+
                 <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
                 <div class="toast" id="toast_ai"></div>
+            </div>
+
+            <div class="control-box">
+                <h2>📶 Cài đặt WiFi cho Robot</h2>
+                <div class="input-group">
+                    <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
+                    <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
+                    <button class="btn-action btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+                </div>
+                <div class="toast" id="toast_wifi"></div>
             </div>
         </div>
     </div>
@@ -198,14 +216,24 @@
         };
 
         function updateDashboard(data) {
+            // Cập nhật thống kê
             const fields = ["posture", "blink", "rubbing", "yawn", "tilt", "lowlight", "distract", "absence"];
             fields.forEach(f => { if(data[f] !== undefined) document.getElementById(f).innerText = data[f]; });
             
-            if(data.bright !== undefined) { document.getElementById("brightness").value = data.bright; document.getElementById("bright_val").innerText = Math.round((data.bright / 255) * 100); }
-            if(data.ai_light !== undefined) { document.getElementById("ai_light").value = data.ai_light; document.getElementById("val_light").innerText = data.ai_light; }
-            if(data.tof_dist !== undefined) { document.getElementById("tof_dist").value = data.tof_dist; document.getElementById("val_dist").innerText = data.tof_dist; }
-            if(data.ai_yaw !== undefined) { document.getElementById("ai_yaw").value = data.ai_yaw; document.getElementById("val_yaw").innerText = data.ai_yaw; }
-            if(data.ai_roll !== undefined) { document.getElementById("ai_roll").value = data.ai_roll; document.getElementById("val_roll").innerText = data.ai_roll; }
+            // Hàm bọc cập nhật an toàn: Không ghi đè thông số nếu người dùng đang chạm/sửa thanh kéo
+            function safeUpdate(id, val, textId, isPercent) {
+                let el = document.getElementById(id);
+                if(document.activeElement !== el && val !== undefined) {
+                    el.value = val;
+                    if(textId) document.getElementById(textId).innerText = isPercent ? Math.round((val/255)*100) : val;
+                }
+            }
+
+            safeUpdate("brightness", data.bright, "bright_val", true);
+            safeUpdate("ai_light", data.ai_light, "val_light", false);
+            safeUpdate("tof_dist", data.tof_dist, "val_dist", false);
+            safeUpdate("ai_yaw", data.ai_yaw, "val_yaw", false);
+            safeUpdate("ai_roll", data.ai_roll, "val_roll", false);
             
             // Cập nhật trạng thái Checkbox từ Robot
             if(data.aud_pos !== undefined) document.getElementById("aud_posture").checked = data.aud_pos;
@@ -224,8 +252,16 @@
         }
 
         function testSpeaker() { sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!"); }
-        function setBrightness(val) { document.getElementById("bright_val").innerText = Math.round((val/255)*100); sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!"); }
-        function setTimer() { let mins = document.getElementById("minutes").value; if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học!"); }
+        
+        function setBrightness(val) { 
+            document.getElementById("bright_val").innerText = Math.round((val/255)*100); 
+            sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!"); 
+        }
+        
+        function setTimer() { 
+            let mins = document.getElementById("minutes").value; 
+            if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học!"); 
+        }
         
         function setAiConfig() {
             let payload = JSON.stringify({ 
@@ -237,7 +273,7 @@
             sendMqttMessage("robot_mat/config_ai", payload, "toast_ai", "Đã cập nhật AI!");
         }
 
-        // HÀM MỚI: Gửi cấu hình Audio
+        // Tự động lưu trạng thái Âm thanh mỗi khi tích/bỏ tích
         function setAudioConfig() {
             let payload = JSON.stringify({
                 pos: document.getElementById("aud_posture").checked,
@@ -246,6 +282,16 @@
                 abs: document.getElementById("aud_absence").checked
             });
             sendMqttMessage("robot_mat/config_audio", payload, "toast_audio", "Đã lưu cài đặt Loa!");
+        }
+
+        function setWifi() {
+            let ssid = document.getElementById('wifi_ssid').value;
+            let pass = document.getElementById('wifi_pass').value;
+            if(ssid) {
+                let payload = JSON.stringify({ssid: ssid, pass: pass});
+                sendMqttMessage("robot_mat/config_wifi", payload, "toast_wifi", "Đã gửi WiFi!");
+                document.getElementById('wifi_ssid').value = ""; document.getElementById('wifi_pass').value = "";
+            } else alert("Vui lòng nhập tên WiFi!");
         }
     </script>
 </body>
