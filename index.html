@@ -18,38 +18,27 @@
 
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg); 
-            color: var(--text-main);
-            padding: 15px; 
-            padding-bottom: 80px; /* Chừa khoảng trống cho thanh menu dưới đáy */
+            background: var(--bg); color: var(--text-main);
+            padding: 15px; padding-bottom: 80px; 
         }
 
         .wrapper { width: 100%; max-width: 500px; margin: 0 auto; }
-
         .header { text-align: center; margin-bottom: 20px; margin-top: 10px; }
         .header h1 { font-size: 26px; color: var(--primary); margin-bottom: 10px; }
-        .status-badge { 
-            display: inline-block; padding: 10px 15px; border-radius: 20px; 
-            font-size: 13px; font-weight: bold; background: #e8ecef; color: var(--text-sub); width: 100%; 
-        }
+        .status-badge { display: inline-block; padding: 10px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; background: #e8ecef; color: var(--text-sub); width: 100%; }
 
-        /* Logic chuyển Tab */
         .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Lưới Thống kê (Trang chủ) */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .card { background: var(--card); padding: 15px 10px; border-radius: 16px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card .icon { font-size: 26px; margin-bottom: 5px; }
         .card h3 { font-size: 11px; color: var(--text-sub); margin-bottom: 5px; text-transform: uppercase; }
         .card p { font-size: 24px; font-weight: 800; color: var(--primary); }
         
-        #tilt { color: var(--accent-purple); }
-        #lowlight { color: var(--accent-orange); }
-        #posture { color: var(--accent-red); }
+        #tilt { color: var(--accent-purple); } #lowlight { color: var(--accent-orange); } #posture { color: var(--accent-red); }
 
-        /* Các Khối Điều khiển (Cài đặt) */
         .control-box { background: var(--card); padding: 20px 15px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .control-box h2 { font-size: 16px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         
@@ -57,34 +46,29 @@
         .input-group label { font-size: 14px; font-weight: bold; color: var(--text-sub); }
         .input-group small { color: gray; font-size: 12px; margin-top: -5px; }
 
-        input[type="text"], input[type="password"], input[type="number"] { 
-            width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa;
-        }
+        input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; outline: none; background: #fafafa; }
         input:focus { border-color: var(--primary); background: #fff; }
         input[type="range"] { padding: 0; border: none; height: 35px; width: 100%; }
         
+        /* Checkbox Style */
+        .check-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .check-item { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-main); background: #f9f9f9; padding: 10px; border-radius: 8px; border: 1px solid #eee;}
+        .check-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); }
+
         .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
         .btn-action:active { transform: scale(0.98); }
         .btn-test { background: var(--accent-orange); margin-bottom: 15px; }
         .btn-ai { background: var(--accent-purple); }
+        .btn-audio { background: var(--accent-green); }
         .btn-wifi { background: var(--text-main); }
         
         .toast { text-align: center; font-size: 13px; color: var(--accent-green); height: 15px; margin-top: 5px; font-weight: bold;}
 
-        /* Thanh Điều Hướng Dưới Đáy (Bottom Navigation) */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--card); display: flex; justify-content: space-around;
-            padding: 10px 0 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000;
-        }
-        .nav-item {
-            background: none; border: none; color: var(--text-sub); font-size: 12px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0 15px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000; }
+        .nav-item { background: none; border: none; color: var(--text-sub); font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--primary); font-weight: bold; }
         .nav-icon { font-size: 22px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active .nav-icon { filter: grayscale(0%); opacity: 1; }
-
     </style>
 </head>
 <body>
@@ -111,12 +95,10 @@
             <div class="control-box">
                 <h2>⏱️ Quản lý Học tập</h2>
                 <button class="btn-action btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
-                
                 <div class="input-group">
                     <label for="brightness">💡 Độ sáng màn hình: <span id="bright_val" style="color: var(--primary);">100</span>%</label>
                     <input type="range" id="brightness" min="0" max="255" value="255" onchange="setBrightness(this.value)">
                 </div>
-                
                 <div class="input-group">
                     <label for="minutes">⏳ Đặt thời gian học (Phút):</label>
                     <input type="number" id="minutes" placeholder="Nhập số phút..." value="25">
@@ -126,200 +108,144 @@
             </div>
 
             <div class="control-box">
-                <h2>🧠 Cài đặt AI & Cảm biến ToF</h2>
-                
-                <div class="input-group">
-                    <label for="ai_light">💡 Ngưỡng báo tối (Đang đặt: <span id="val_light" style="color: var(--accent-orange);">80</span>)</label>
-                    <input type="range" id="ai_light" min="20" max="150" value="80" oninput="document.getElementById('val_light').innerText=this.value">
-                    <small>Số to hơn = Dễ báo thiếu sáng hơn</small>
+                <h2>🔊 Bật/Tắt Âm Thanh Cảnh Báo</h2>
+                <div class="check-group">
+                    <label class="check-item"><input type="checkbox" id="aud_posture" checked> ⚠️ Sai tư thế (Cúi thấp, Ngồi gần)</label>
+                    <label class="check-item"><input type="checkbox" id="aud_focus" checked> 👀 Mất tập trung (Nghiêng, Quay mặt)</label>
+                    <label class="check-item"><input type="checkbox" id="aud_light" checked> 💡 Cảnh báo thiếu sáng</label>
+                    <label class="check-item"><input type="checkbox" id="aud_absence" checked> 🚶 Cảnh báo vắng mặt</label>
                 </div>
-
-                <div class="input-group">
-                    <label for="tof_dist">📏 Khoảng cách ngồi tối thiểu ToF: <span id="val_dist" style="color: var(--accent-red);">350</span> mm</label>
-                    <input type="range" id="tof_dist" min="200" max="600" step="10" value="350" oninput="document.getElementById('val_dist').innerText=this.value">
-                    <small>Cảnh báo "NGỒI XA RA" khi gần hơn mốc này</small>
-                </div>
-
-                <div class="input-group">
-                    <label for="ai_yaw">↔️ Độ nhạy quay mặt: <span id="val_yaw" style="color: var(--primary);">0.60</span></label>
-                    <input type="range" id="ai_yaw" min="0.45" max="0.75" step="0.01" value="0.60" oninput="document.getElementById('val_yaw').innerText=this.value">
-                    <small>Số to hơn = Bắt quay mặt nhạy hơn</small>
-                </div>
-
-                <div class="input-group">
-                    <label for="ai_roll">📐 Độ nhạy nghiêng đầu: <span id="val_roll" style="color: var(--accent-purple);">0.95</span></label>
-                    <input type="range" id="ai_roll" min="0.85" max="1.10" step="0.01" value="0.95" oninput="document.getElementById('val_roll').innerText=this.value">
-                    <small>Số nhỏ hơn = Bắt nghiêng đầu nhạy hơn</small>
-                </div>
-
-                <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
-                <div class="toast" id="toast_ai"></div>
+                <button class="btn-action btn-audio" onclick="setAudioConfig()">💾 LƯU CHẾ ĐỘ ÂM THANH</button>
+                <div class="toast" id="toast_audio"></div>
             </div>
 
             <div class="control-box">
-                <h2>📶 Cài đặt WiFi cho Robot</h2>
+                <h2>🧠 Cài đặt AI & Cảm biến ToF</h2>
                 <div class="input-group">
-                    <input type="text" id="wifi_ssid" placeholder="Tên WiFi (SSID)">
-                    <input type="password" id="wifi_pass" placeholder="Mật khẩu WiFi">
-                    <button class="btn-action btn-wifi" onclick="setWifi()">CẬP NHẬT WIFI</button>
+                    <label for="ai_light">💡 Ngưỡng báo tối (Đang đặt: <span id="val_light" style="color: var(--accent-orange);">80</span>)</label>
+                    <input type="range" id="ai_light" min="20" max="300" value="80" oninput="document.getElementById('val_light').innerText=this.value">
                 </div>
-                <div class="toast" id="toast_wifi"></div>
+                <div class="input-group">
+                    <label for="tof_dist">📏 Cảnh báo gần ToF: <span id="val_dist" style="color: var(--accent-red);">350</span> mm</label>
+                    <input type="range" id="tof_dist" min="200" max="600" step="10" value="350" oninput="document.getElementById('val_dist').innerText=this.value">
+                </div>
+                <div class="input-group">
+                    <label for="ai_yaw">↔️ Nhạy quay mặt: <span id="val_yaw" style="color: var(--primary);">0.60</span></label>
+                    <input type="range" id="ai_yaw" min="0.45" max="0.75" step="0.01" value="0.60" oninput="document.getElementById('val_yaw').innerText=this.value">
+                </div>
+                <div class="input-group">
+                    <label for="ai_roll">📐 Nhạy nghiêng đầu: <span id="val_roll" style="color: var(--accent-purple);">0.95</span></label>
+                    <input type="range" id="ai_roll" min="0.85" max="1.10" step="0.01" value="0.95" oninput="document.getElementById('val_roll').innerText=this.value">
+                </div>
+                <button class="btn-action btn-ai" onclick="setAiConfig()">💾 LƯU CÀI ĐẶT AI</button>
+                <div class="toast" id="toast_ai"></div>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('home', this)">
-            <span class="nav-icon">🏠</span>
-            Trang chủ
+            <span class="nav-icon">🏠</span> Trang chủ
         </button>
         <button class="nav-item" onclick="switchTab('settings', this)">
-            <span class="nav-icon">⚙️</span>
-            Cài đặt
+            <span class="nav-icon">⚙️</span> Cài đặt
         </button>
     </nav>
 
     <script>
-        // --- LOGIC CHUYỂN TAB ---
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active');
         }
 
-        // --- LOGIC MQTT ---
         const broker = "6c4be298786448adb4ec456c4834e726.s1.eu.hivemq.cloud";
         const port = 8884;
         const clientId = "web_parent_" + Math.random().toString(16).substr(2, 8);
         const client = new Paho.MQTT.Client(broker, port, clientId);
-        
         let lastSeenTime = 0;
-        let onlineCheckTimer;
 
         const options = {
-            useSSL: true,
-            userName: "ngoctuyka", 
-            password: "Tu12345678@",
-            onSuccess: onConnect,
-            onFailure: function(e) { console.log("Lỗi MQTT:", e); }
+            useSSL: true, userName: "ngoctuyka", password: "Tu12345678@",
+            onSuccess: () => {
+                document.getElementById("status_badge").innerHTML = "🟡 Đang chờ tín hiệu...";
+                client.subscribe("robot_mat/data");
+                setInterval(() => {
+                    if (Date.now() - lastSeenTime > 15000 && lastSeenTime !== 0) {
+                        const badge = document.getElementById("status_badge");
+                        badge.innerHTML = "🔴 Robot Đang Tắt / Mất Mạng";
+                        badge.style.background = "#fadbd8"; badge.style.color = "var(--accent-red)";
+                    }
+                }, 5000);
+            }
         };
 
         window.onload = function() {
-            if(localStorage.getItem('vision_buddy_data')) {
-                updateDashboard(JSON.parse(localStorage.getItem('vision_buddy_data')));
-            }
+            if(localStorage.getItem('vision_buddy_data')) updateDashboard(JSON.parse(localStorage.getItem('vision_buddy_data')));
             client.connect(options);
-            client.onMessageArrived = onMessageArrived;
+            client.onMessageArrived = (message) => {
+                if (message.destinationName === "robot_mat/data") {
+                    const data = JSON.parse(message.payloadString);
+                    updateDashboard(data);
+                    localStorage.setItem('vision_buddy_data', JSON.stringify(data));
+                    lastSeenTime = Date.now();
+                    const badge = document.getElementById("status_badge");
+                    badge.innerHTML = "🟢 Robot Đang Hoạt Động";
+                    badge.style.background = "#d5f5e3"; badge.style.color = "var(--accent-green)";
+                }
+            };
         };
 
-        function onConnect() {
-            document.getElementById("status_badge").innerHTML = "🟡 Đang chờ tín hiệu Robot...";
-            client.subscribe("robot_mat/data");
-            onlineCheckTimer = setInterval(() => {
-                if (Date.now() - lastSeenTime > 15000 && lastSeenTime !== 0) {
-                    const badge = document.getElementById("status_badge");
-                    badge.innerHTML = "🔴 Robot Đang Tắt / Mất Mạng";
-                    badge.style.background = "#fadbd8";
-                    badge.style.color = "var(--accent-red)";
-                }
-            }, 5000);
-        }
-
-        function onMessageArrived(message) {
-            if (message.destinationName === "robot_mat/data") {
-                const data = JSON.parse(message.payloadString);
-                updateDashboard(data);
-                localStorage.setItem('vision_buddy_data', JSON.stringify(data));
-                lastSeenTime = Date.now();
-                const badge = document.getElementById("status_badge");
-                badge.innerHTML = "🟢 Robot Đang Hoạt Động";
-                badge.style.background = "#d5f5e3";
-                badge.style.color = "var(--accent-green)";
-            }
-        }
-
         function updateDashboard(data) {
-            // Cập nhật thống kê
-            if(data.posture !== undefined) document.getElementById("posture").innerText = data.posture;
-            if(data.blink !== undefined) document.getElementById("blink").innerText = data.blink;
-            if(data.rubbing !== undefined) document.getElementById("rubbing").innerText = data.rubbing;
-            if(data.yawn !== undefined) document.getElementById("yawn").innerText = data.yawn;
-            if(data.tilt !== undefined) document.getElementById("tilt").innerText = data.tilt;
-            if(data.lowlight !== undefined) document.getElementById("lowlight").innerText = data.lowlight;
-            if(data.distract !== undefined) document.getElementById("distract").innerText = data.distract;
-            if(data.absence !== undefined) document.getElementById("absence").innerText = data.absence;
+            const fields = ["posture", "blink", "rubbing", "yawn", "tilt", "lowlight", "distract", "absence"];
+            fields.forEach(f => { if(data[f] !== undefined) document.getElementById(f).innerText = data[f]; });
             
-            // Cập nhật cài đặt đồng bộ từ Robot về Web
-            if(data.bright !== undefined) {
-                document.getElementById("brightness").value = data.bright;
-                document.getElementById("bright_val").innerText = Math.round((data.bright / 255) * 100);
-            }
-            if(data.ai_light !== undefined) {
-                document.getElementById("ai_light").value = data.ai_light;
-                document.getElementById("val_light").innerText = data.ai_light;
-            }
-            if(data.tof_dist !== undefined) {
-                document.getElementById("tof_dist").value = data.tof_dist;
-                document.getElementById("val_dist").innerText = data.tof_dist;
-            }
-            if(data.ai_yaw !== undefined) {
-                document.getElementById("ai_yaw").value = data.ai_yaw;
-                document.getElementById("val_yaw").innerText = data.ai_yaw;
-            }
-            if(data.ai_roll !== undefined) {
-                document.getElementById("ai_roll").value = data.ai_roll;
-                document.getElementById("val_roll").innerText = data.ai_roll;
-            }
+            if(data.bright !== undefined) { document.getElementById("brightness").value = data.bright; document.getElementById("bright_val").innerText = Math.round((data.bright / 255) * 100); }
+            if(data.ai_light !== undefined) { document.getElementById("ai_light").value = data.ai_light; document.getElementById("val_light").innerText = data.ai_light; }
+            if(data.tof_dist !== undefined) { document.getElementById("tof_dist").value = data.tof_dist; document.getElementById("val_dist").innerText = data.tof_dist; }
+            if(data.ai_yaw !== undefined) { document.getElementById("ai_yaw").value = data.ai_yaw; document.getElementById("val_yaw").innerText = data.ai_yaw; }
+            if(data.ai_roll !== undefined) { document.getElementById("ai_roll").value = data.ai_roll; document.getElementById("val_roll").innerText = data.ai_roll; }
+            
+            // Cập nhật trạng thái Checkbox từ Robot
+            if(data.aud_pos !== undefined) document.getElementById("aud_posture").checked = data.aud_pos;
+            if(data.aud_foc !== undefined) document.getElementById("aud_focus").checked = data.aud_foc;
+            if(data.aud_lig !== undefined) document.getElementById("aud_light").checked = data.aud_lig;
+            if(data.aud_abs !== undefined) document.getElementById("aud_absence").checked = data.aud_abs;
         }
 
         function sendMqttMessage(topic, payloadStr, toastId, toastMsg) {
             if(client.isConnected()) {
                 let message = new Paho.MQTT.Message(payloadStr);
-                message.destinationName = topic;
-                client.send(message);
+                message.destinationName = topic; client.send(message);
                 const toast = document.getElementById(toastId);
-                toast.innerText = toastMsg;
-                setTimeout(() => { toast.innerText = ""; }, 3000);
-            } else { alert("Chưa kết nối được tới máy chủ! Vui lòng đợi."); }
+                toast.innerText = toastMsg; setTimeout(() => { toast.innerText = ""; }, 3000);
+            } else alert("Chưa kết nối máy chủ!");
         }
 
         function testSpeaker() { sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!"); }
+        function setBrightness(val) { document.getElementById("bright_val").innerText = Math.round((val/255)*100); sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!"); }
+        function setTimer() { let mins = document.getElementById("minutes").value; if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học!"); }
         
-        function setBrightness(val) {
-            document.getElementById("bright_val").innerText = Math.round((val / 255) * 100);
-            sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!");
-        }
-
-        function setTimer() {
-            let mins = document.getElementById("minutes").value;
-            if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học " + mins + " phút!");
-        }
-
         function setAiConfig() {
-            let light = document.getElementById("ai_light").value;
-            let tofDist = document.getElementById("tof_dist").value;
-            let aiYaw = document.getElementById("ai_yaw").value;
-            let aiRoll = document.getElementById("ai_roll").value;
-            
             let payload = JSON.stringify({ 
-                light: parseInt(light), 
-                tof_dist: parseInt(tofDist),
-                ai_yaw: parseFloat(aiYaw),
-                ai_roll: parseFloat(aiRoll)
+                light: parseInt(document.getElementById("ai_light").value), 
+                tof_dist: parseInt(document.getElementById("tof_dist").value),
+                ai_yaw: parseFloat(document.getElementById("ai_yaw").value),
+                ai_roll: parseFloat(document.getElementById("ai_roll").value)
             });
-            sendMqttMessage("robot_mat/config_ai", payload, "toast_ai", "Đã cập nhật não bộ AI!");
+            sendMqttMessage("robot_mat/config_ai", payload, "toast_ai", "Đã cập nhật AI!");
         }
 
-        function setWifi() {
-            let ssid = document.getElementById('wifi_ssid').value;
-            let pass = document.getElementById('wifi_pass').value;
-            if(ssid) {
-                let payload = JSON.stringify({ssid: ssid, pass: pass});
-                sendMqttMessage("robot_mat/config_wifi", payload, "toast_wifi", "Đã gửi cấu hình WiFi mới!");
-                document.getElementById('wifi_ssid').value = ""; document.getElementById('wifi_pass').value = "";
-            } else { alert("Vui lòng nhập tên WiFi!"); }
+        // HÀM MỚI: Gửi cấu hình Audio
+        function setAudioConfig() {
+            let payload = JSON.stringify({
+                pos: document.getElementById("aud_posture").checked,
+                foc: document.getElementById("aud_focus").checked,
+                lig: document.getElementById("aud_light").checked,
+                abs: document.getElementById("aud_absence").checked
+            });
+            sendMqttMessage("robot_mat/config_audio", payload, "toast_audio", "Đã lưu cài đặt Loa!");
         }
     </script>
 </body>
