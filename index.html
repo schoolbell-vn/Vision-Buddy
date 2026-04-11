@@ -90,6 +90,18 @@
         </div>
 
         <div id="tab-settings" class="tab-content">
+            
+            <div class="control-box">
+                <h2>🎮 Đấu Trường Tiếng Anh</h2>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn-action" style="background: var(--accent-green);" onclick="startQuiz()">▶️ BẬT GAME</button>
+                    <button class="btn-action" style="background: var(--accent-red);" onclick="stopQuiz()">⏹️ TẮT GAME</button>
+                </div>
+                <button class="btn-action" style="background: var(--primary);" onclick="updateVocab()">🌐 NẠP TỪ VỰNG MỚI (WIFI)</button>
+                <div class="guide" style="margin-top: 15px;"><b>Lưu ý:</b> Khi bấm "Nạp từ vựng", Robot sẽ kêu tiếng bíp, ngắt Camera và hiển thị <b>địa chỉ IP</b> lên màn hình TFT. Bạn dùng trình duyệt trên điện thoại truy cập vào địa chỉ IP đó để tải file <b>tuvung.txt</b> lên.</div>
+                <div class="toast" id="toast_game"></div>
+            </div>
+
             <div class="control-box">
                 <h2>⏱️ Quản lý Học tập</h2>
                 <button class="btn-action btn-test" onclick="testSpeaker()">🔊 TEST LOA ROBOT</button>
@@ -266,7 +278,7 @@
             }
 
             safeUpdate("brightness", data.bright, "bright_val", true);
-            safeUpdate("volume", data.vol, "vol_val", false); // Cập nhật thanh trượt volume
+            safeUpdate("volume", data.vol, "vol_val", false); 
             safeUpdate("ai_light", data.ai_light, "val_light", false);
             safeUpdate("tof_dist", data.tof_dist, "val_dist", false);
             safeUpdate("ai_yaw", data.ai_yaw, "val_yaw", false);
@@ -292,14 +304,16 @@
             } else alert("Chưa kết nối máy chủ!");
         }
 
-        function testSpeaker() { sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!"); }
-        
-        // HÀM GỬI LỆNH CHỈNH ÂM LƯỢNG MỚI
-        function setVolume(val) { 
-            document.getElementById("vol_val").innerText = val; 
-            sendMqttMessage("robot_mat/volume", val.toString(), "toast_timer", "Đã chỉnh âm lượng!"); 
+        // CÁC HÀM ĐIỀU KHIỂN GAME TỪ XA
+        function startQuiz() { sendMqttMessage("robot_mat/control", "START_QUIZ", "toast_game", "Đã bật Game!"); }
+        function stopQuiz() { sendMqttMessage("robot_mat/control", "STOP_QUIZ", "toast_game", "Đã tắt Game!"); }
+        function updateVocab() { 
+            sendMqttMessage("robot_mat/control", "UPDATE_VOCAB", "toast_game", "Đang mở cổng nạp từ vựng..."); 
+            setTimeout(() => { alert("Lệnh đã được gửi! Vui lòng nhìn lên màn hình của Robot để xem địa chỉ IP và hướng dẫn nạp file."); }, 500);
         }
 
+        function testSpeaker() { sendMqttMessage("robot_mat/control", "TEST_SPEAKER", "toast_timer", "Đã gửi lệnh Test Loa!"); }
+        function setVolume(val) { document.getElementById("vol_val").innerText = val; sendMqttMessage("robot_mat/volume", val.toString(), "toast_timer", "Đã chỉnh âm lượng!"); }
         function setBrightness(val) { document.getElementById("bright_val").innerText = Math.round((val/255)*100); sendMqttMessage("robot_mat/brightness", val.toString(), "toast_timer", "Đã đổi độ sáng!"); }
         function setTimer() { let mins = document.getElementById("minutes").value; if (mins > 0) sendMqttMessage("robot_mat/set_timer", mins.toString(), "toast_timer", "Đã gửi lệnh học!"); }
         
